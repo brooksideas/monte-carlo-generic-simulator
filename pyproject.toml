@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "monte-carlo-generic-simulatormonte-carlo-generic-simulator"
+name = "monte-carlo-generic-simulator"
 description = 'A Simple Monte Carlo Simulator for different board games such as Coin flips , Dice rolls , Roman Alphabet , Card shuffle and many more.'
 readme = "README.md"
 requires-python = ">=3.7"
@@ -33,7 +33,7 @@ Issues = "https://github.com/brooksideas/monte-carlo-generic-simulator/issues"
 Source = "https://github.com/brooksideas/monte-carlo-generic-simulator"
 
 [tool.hatch.version]
-path = "monte_carlo_generic_simulatormonte_carlo_generic_simulator/__about__.py"
+path = "__about__.py"
 
 [tool.hatch.envs.default]
 dependencies = [
@@ -50,9 +50,7 @@ python = ["37", "38", "39", "310", "311"]
 [tool.coverage.run]
 branch = true
 parallel = true
-omit = [
-    "monte_carlo_generic_simulatormonte_carlo_generic_simulator/__about__.py",
-]
+omit = []
 
 [tool.coverage.report]
 exclude_lines = [
@@ -60,3 +58,12 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "if TYPE_CHECKING:",
 ]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github",
+    "/docs",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/montecarlo"]
