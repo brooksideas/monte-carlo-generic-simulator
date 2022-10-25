@@ -10,8 +10,8 @@ class MonteCarloTestSuite(unittest.TestCase):
     def setUp(self):
         die_list = [1, 2, 3, 4, 5, 6]
         coin_list = ['Heads', 'Tails']
-        number_die = Die(die_list)
-        coin_die = Die(coin_list)
+        self.number_die = Die(die_list)
+        self.coin_die = Die(coin_list)
 
     def tearDown(self):
         # Garbage collection process
@@ -41,6 +41,20 @@ class MonteCarloTestSuite(unittest.TestCase):
         actual = type(die)
         expected = type(Die(float_die_list))
         self.assertTrue(actual, expected)
+
+    # Test the change weight method for integer
+    def test_change_weight_int_die(self):
+        self.number_die.change_weight(2, 5)
+        actual = self.number_die.faces_weights_df.iloc[1, 1:][0]
+        expected = 5.0
+        self.assertEqual(actual, expected)
+
+    # Test the change weight method for string
+    def test_change_weight_string_die(self):
+        self.coin_die.change_weight('Heads', 4)
+        actual = self.coin_die.faces_weights_df.iloc[0, 1:][0]
+        expected = 4.0
+        self.assertEqual(actual, expected)
 
 
 if __name__ == '__main__':
