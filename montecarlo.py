@@ -1,5 +1,5 @@
 import random as rd
-from itertools import combinations, product
+from itertools import product
 
 import numpy as np
 import pandas as pd
@@ -195,12 +195,12 @@ class Analyzer:
 
     ATTRIBUTES:
 
-    METHODS: __init__:: Instantiate a Game Objects from the Game Class and infers the data type of the die faces.
-    face counts per roll, i.e. the number of times a given face appeared in each roll. For example, if a roll of five
-    dice has all sixes, then the counts for this roll would be 6 for the face value '6' and 0 for the other faces.
-    jackpot count, i.e. how many times a roll resulted in all faces being the same, e.g. six ones for a six-sided
-    die. combo count, i.e. how many combination types of faces were rolled and their counts. permutation count,
-    i.e. how may sequence types were rolled and their counts.
+    METHODS:
+    __init__:: Instantiate a Game Objects from the Game Class and infers the data type of the die faces.
+    face counts per roll, i.e. the number of times a given face appeared in each roll. For example, if a roll of five dice has all sixes, then the counts for this roll would be 6 for the face value '6' and 0 for the other faces.
+    jackpot count, i.e. how many times a roll resulted in all faces being the same, e.g. six ones for a six-sided die.
+    combo count, i.e. how many combination types of faces were rolled and their counts.
+    permutation count, i.e. how may sequence types were rolled and their counts.
     -------------------------------------------------------------------------
     """
 
@@ -212,8 +212,8 @@ class Analyzer:
         INPUTS:
         Takes one argument which is a Game Object
 
-        OUTPUTS: Assigns Game Object for internal use , Game dataframe type (<int> | <str> | <float>), Result of the
-        Game played([<int> | <str> | <float>])
+        OUTPUTS:
+        Assigns Game Object for internal use , Game dataframe type (<int> | <str> | <float>), Result of the Game played([<int> | <str> | <float>])
         """
         self.game = game
         # Infers the data type of the die faces
@@ -229,6 +229,7 @@ class Analyzer:
         self.jackpot_results_df.index.name = ''
         self.jack_pot_indices = []
         # Combination
+        self.combination_list = []
         self.combination_df = pd.DataFrame()
         # Permutation
         self.permutation_df = pd.DataFrame()
@@ -250,7 +251,7 @@ class Analyzer:
         self.face_count_df = pd.DataFrame(index=index, columns=self.game.cols)
         self.face_count_df.index.name = 'roll number'
         self.face_list = np.zeros(len(self.game.cols),
-                                  dtype=int)  # Hold the face value and increment when new similar value is found
+                                  dtype=int)  # Hold the face value and increment when new similar value is found.
         # Uses Game Cols Structure Copy
 
         for index, row in self.game_result_df.iterrows():
@@ -281,7 +282,7 @@ class Analyzer:
         self.jackpot_results_df.index.name = 'roll number'
         self.jack_pot_indices = []
         self.jackpot_list = np.zeros(len(self.game.cols),
-                                     dtype=int)  # Hold the face value and increment when new similar value is found
+                                     dtype=int)  # Hold the face value and increment when new similar value is found.
         # Uses Game Cols Structure Copy
 
         for index, row in self.game_result_df.iterrows():
@@ -312,13 +313,30 @@ class Analyzer:
         INPUTS:
         Takes no argument
 
-        OUTPUTS: Returns the count of how many times the Game could result in distinct/unique combinations of faces
-        when dice is played/rolled You can also access the combination multi-columned Dataframe using <Class
-        Analyzer>.combination_df
+        OUTPUTS:
+        Returns the count of how many times the Game could result in distinct/unique combinations of faces when dice is played/rolled
+        You can also access the full combination multi-columned Dataframe using <Class Analyzer>.combination_df
+        or access the corresponding <Class Analyzer>.combination_list
+
         """
-        # Loop through the results array and add to the face_combination_list only if not present
-        face_combination_list = []
-        # Check if the face has been rolled during the Game , checking presence
+        # Loop through the results array and add to the face_combo_list only if not present
+        face_combo_list = []
+
+        # The faces that have been rolled by the dice game
+        face_combination_rolled = []
+
+        # The combination List of rolled dice with the respective count
+
+        # Check if the face has been rolled during the Game; and form a List[(tuples)]
+        die_faces_rolled = []
+        for index, row in self.game_result_df.iterrows():
+            for col in self.game.columns:
+                current_die_face = row[col]
+                die_faces_rolled.append(current_die_face)
+            face_combination_rolled.append(tuple(die_faces_rolled + [0]))  # Initialize with zero append
+            die_faces_rolled = []  # flush the list
+
+        # Check all possible values similarly to the permutation given below
         check_face_presence = []
         for index, row in self.game_result_df.iterrows():
             for col in self.game.columns:
@@ -335,40 +353,48 @@ class Analyzer:
                         check_face_presence.append(row[col])
 
         # Extract only the Unique values
-        face_combination_list = list(set(check_face_presence))
+        face_combo_list = list(set(check_face_presence))
 
         # Sort the values
-        face_combination_list.sort(key=self.game_df_data_type)
+        face_combo_list.sort(key=self.game_df_data_type)
 
-        # Perform the Combination of unique values and store it in self.combination_df for public access
-        combination_list = []
-        # If the List type of str the different combinations resembles the permutation
-        if self.game_df_data_type == str:
-            # using list comprehension to formulate all distinct combinations of the elements
-            combo_list = [list(face_combination_list) for _ in range(len(self.game.dice))]
-            # using product() to get Combinations
-            combination_list = list(product(*combo_list))
-        else:
-            combination_list = list(combinations(face_combination_list, len(self.game.dice)))
+        # Perform the combination  of unique values and store it in self.permutation_df for public access
+        # initializing the range with the Number of Dice rolled
+        # using list comprehension to formulate all distinct permutation s of the elements
+        combo_list = [list(face_combo_list) for _ in range(len(self.game.dice))]
 
-        # Construct the combination tuples indices
-        combination_indices_list = [tuple([i] * len(combination_list)) for i in range(len(combination_list))]
+        # using product() to get permutations
+        self.combination_list = list(product(*combo_list))
+
+        # Instantiate with 0 append to all values
+        self.combination_list = [tuple(list(tup) + [0]) for tup in self.combination_list]
+
+        # Construct the count for the combinations given
+        for passed in face_combination_rolled:
+            for index, tup in enumerate(self.combination_list):
+                if tup[:-1] == passed[:-1]:
+                    combination_increase = list(tup[-1:])[0] + 1
+                    self.combination_list[index] = self.combination_list[index][:-1] + (combination_increase,)
+
+        # Construct the combination  tuples indices
+        combination_indices_list = [tuple([i] * len(self.combination_list)) for i in range(len(self.combination_list))]
 
         # Construct the Index name
-        combination_indices_name_list = ["roll_number " + str(index + 1) for index in range(len(combination_list))]
+        combination_indices_name_list = ["roll_number " + str(index + 1) for index in range(len(self.combination_list))]
 
         # Create Row Level MultiIndex
         combination_index = pd.MultiIndex.from_tuples(combination_indices_list, names=combination_indices_name_list)
 
         # Create Column Level MultiIndex
-        cols = pd.MultiIndex.from_tuples(combination_list)
-
+        cols = pd.MultiIndex.from_tuples(self.combination_list)
         # Create Data for the MultiIndex table
-        data = [[1 for i in range(len(combination_list))] for i in range(len(combination_list))]
-
-        # Construct the Combination Dataframe
+        data = [[1 for i in range(len(self.combination_list))] for i in range(len(self.combination_list))]
+        # Construct the permutation  Dataframe
         self.combination_df = pd.DataFrame(data, columns=cols, index=combination_index)
-        return len(combination_list)
+        pd.set_option('display.max_rows', None)
+
+        # Return the count of all the unique combinations from the game
+        return len(list(set(face_combination_rolled)))
 
     # Permutation order matters , so we will have to look through all the possible values
     def permutation(self):
@@ -430,7 +456,7 @@ class Analyzer:
 
         # Create Data for the MultiIndex table
         data = [[1 for i in range(len(permutation_list))] for i in range(len(permutation_list))]
-
         # Construct the permutation  Dataframe
         self.permutation_df = pd.DataFrame(data, columns=cols, index=permutation_index)
+        pd.set_option('display.max_rows', None)
         return len(permutation_list)
