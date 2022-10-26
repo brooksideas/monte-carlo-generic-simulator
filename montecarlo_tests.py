@@ -20,6 +20,8 @@ class MonteCarloTestSuite(unittest.TestCase):
         coin_dice.extend([self.coin_die, self.coin_die])
         self.die_game = Game(number_dice)
         self.coin_game = Game(coin_dice)
+        self.die_analyzer = Analyzer(self.die_game)
+        self.coin_analyzer = Analyzer(self.coin_game)
 
     def tearDown(self):
         """Garbage collection process to free up memory"""
@@ -27,35 +29,29 @@ class MonteCarloTestSuite(unittest.TestCase):
         self.coin_die = None
         self.die_game = None
         self.coin_game = None
+        self.die_analyzer = None
+        self.coin_analyzer = None
 
     def test_create_number_die(self):
         """ Testing Integer number Die Object creation"""
 
         die_list = [1, 2, 3, 4, 5, 6]
-        self.die = Die(die_list)
-        actual = type(self.die)
-        expected = type(Die(die_list))
-        # Manual Garbage collection here
-        self.die = None
-        self.assertTrue(actual, expected)
+        actual = Die(die_list)
+        self.assertIsInstance(actual, Die)
 
     def test_create_string_die(self):
         """ Testing String Die Object creation"""
 
         coin_list = ['Heads', 'Tails']
-        self.die = Die(coin_list)
-        actual = type(self.die)
-        expected = type(Die(coin_list))
-        self.assertTrue(actual, expected)
+        actual = Die(coin_list)
+        self.assertIsInstance(actual, Die)
 
     def test_create_float_die(self):
         """Testing Float Die creation"""
 
         float_die_list = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
-        self.die = Die(float_die_list)
-        actual = type(self.die)
-        expected = type(Die(float_die_list))
-        self.assertTrue(actual, expected)
+        actual = Die(float_die_list)
+        self.assertIsInstance(actual, Die)
 
     def test_change_weight_int_die(self):
         """ Test the change weight method for integer"""
@@ -130,10 +126,9 @@ class MonteCarloTestSuite(unittest.TestCase):
         dice.extend([self.number_die, self.number_die])
         self.game = Game(dice)
         actual = self.game
-        expected_class_type = type(self.game)
         self.game = None
         self.assertCountEqual(actual.dice, dice)
-        self.assertTrue(type(actual), expected_class_type)
+        self.assertIsInstance(actual, Game)
 
     def test_create_game_string_die(self):
         """Create a Game Object from the given dice object , expected an instantiated Die Object list passed"""
@@ -141,10 +136,9 @@ class MonteCarloTestSuite(unittest.TestCase):
         dice.extend([self.coin_die, self.coin_die])
         self.game = Game(dice)
         actual = self.game
-        expected_class_type = type(self.game)
         self.game = None
         self.assertCountEqual(actual.dice, dice)
-        self.assertTrue(type(actual), expected_class_type)
+        self.assertIsInstance(actual, Game)
 
     def test_play_game_number_die(self):
         """Play a games with the number faced die"""
@@ -185,6 +179,20 @@ class MonteCarloTestSuite(unittest.TestCase):
         self.assertEqual(len(actual), expected_length)
         self.assertEqual(actual.shape, expected_shape)
         self.assertTrue(type(actual), expected_class_type)
+
+    def test_create_analyzer_number_die(self):
+        """Test created Analyzer class is correct and infers the datatype from the Game Object"""
+        actual = Analyzer(self.die_game)
+        expected_dataframe_data_type = type(self.die_game.dice[0].faces[1])
+        self.assertIsInstance(actual, Analyzer)
+        self.assertTrue(actual.game_df_data_type, expected_dataframe_data_type)
+
+    def test_create_analyzer_string_die(self):
+        """Test created Analyzer class is correct and infers the datatype from the Game Object"""
+        actual = Analyzer(self.coin_game)
+        expected_dataframe_data_type = type(self.coin_game.dice[0].faces[1])
+        self.assertIsInstance(actual, Analyzer)
+        self.assertTrue(actual.game_df_data_type, expected_dataframe_data_type)
 
 
 if __name__ == '__main__':
