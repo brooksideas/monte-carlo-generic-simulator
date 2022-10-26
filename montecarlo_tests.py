@@ -194,6 +194,17 @@ class MonteCarloTestSuite(unittest.TestCase):
         self.assertIsInstance(actual, Analyzer)
         self.assertTrue(actual.game_df_data_type, expected_dataframe_data_type)
 
+    def test_face_count_number_die(self):
+        """Test if the die face count dataframe is correct and has the proper Header construction"""
+        actual = self.die_analyzer.face_count()
+        expected_dataframe_data_type = self.die_analyzer.face_count_df
+        self.assertEqual(actual.empty, expected_dataframe_data_type.empty)
+
+    def test_face_count_string_die(self):
+        """Test if the coin face count dataframe is correct and has the proper Header construction"""
+        actual = self.coin_analyzer.face_count()
+        expected_dataframe_data_type = self.coin_analyzer.face_count_df
+        self.assertEqual(actual.empty, expected_dataframe_data_type.empty)
 
 if __name__ == '__main__':
     unittest.main(verbosity=3)
