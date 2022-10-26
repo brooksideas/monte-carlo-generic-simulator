@@ -68,7 +68,9 @@ class MonteCarloTestSuite(unittest.TestCase):
     def test_change_weight_string_die(self):
         """Test the change weight method for string"""
         self.coin_die.change_weight('Tails', 4)
-        actual = self.coin_die.faces_weights_df.iloc[1, 1:][0]
+        # actual = self.coin_die.faces_weights_df['weights'][:-1][0]
+        actual = self.coin_die.faces_weights_df
+        actual = (actual[actual['faces'] == 'Tails'])['weights'][0]
         expected = 4.0
         self.assertEqual(actual, expected)
 
@@ -146,6 +148,43 @@ class MonteCarloTestSuite(unittest.TestCase):
 
     def test_play_game_number_die(self):
         """Play a games with the number faced die"""
+        actual = self.die_game.play(10)
+        expected_length = 10
+        expected_shape = (10, 2)
+        self.assertEqual(len(actual), expected_length)
+        self.assertEqual(actual.shape, expected_shape)
+
+    def test_play_game_string_die(self):
+        """Play a games with the string faced die"""
+        actual = self.coin_game.play(10)
+        expected_length = 10
+        expected_shape = (10, 2)
+        self.assertEqual(len(actual), expected_length)
+        self.assertEqual(actual.shape, expected_shape)
+
+    def test_show_game_number_die(self):
+        """Show the correct game play result output """
+        actual = self.die_game.show(self.die_game.play(10), 1)
+        expected_length = 10
+        expected_shape = (10, 2)
+        expected_class_type = pd.DataFrame()
+        self.assertIn('Die 1', actual.columns)
+        self.assertIn('Die 2', actual.columns)
+        self.assertEqual(len(actual), expected_length)
+        self.assertEqual(actual.shape, expected_shape)
+        self.assertTrue(type(actual), expected_class_type)
+
+    def test_show_game_string_die(self):
+        """Show the correct game play result output """
+        actual = self.coin_game.show(self.coin_game.play(10), 1)
+        expected_length = 10
+        expected_shape = (10, 2)
+        expected_class_type = pd.DataFrame()
+        self.assertIn('Die 1', actual.columns)
+        self.assertIn('Die 2', actual.columns)
+        self.assertEqual(len(actual), expected_length)
+        self.assertEqual(actual.shape, expected_shape)
+        self.assertTrue(type(actual), expected_class_type)
 
 
 if __name__ == '__main__':
