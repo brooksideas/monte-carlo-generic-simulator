@@ -232,6 +232,7 @@ class Analyzer:
         self.combination_list = []
         self.combination_df = pd.DataFrame()
         # Permutation
+        self.permutation_list = []
         self.permutation_df = pd.DataFrame()
 
         # Method to compute how many times a given face is rolled in each event
@@ -440,23 +441,23 @@ class Analyzer:
         perm_list = [list(face_permutation_list) for _ in range(len(self.game.dice))]
 
         # using product() to get permutation s
-        permutation_list = list(product(*perm_list))
+        self.permutation_list = list(product(*perm_list))
 
         # Construct the permutation  tuples indices
-        permutation_indices_list = [tuple([i] * len(permutation_list)) for i in range(len(permutation_list))]
+        permutation_indices_list = [tuple([i] * len(self.permutation_list)) for i in range(len(self.permutation_list))]
 
         # Construct the Index name
-        permutation_indices_name_list = ["roll_number " + str(index + 1) for index in range(len(permutation_list))]
+        permutation_indices_name_list = ["roll_number " + str(index + 1) for index in range(len(self.permutation_list))]
 
         # Create Row Level MultiIndex
         permutation_index = pd.MultiIndex.from_tuples(permutation_indices_list, names=permutation_indices_name_list)
 
         # Create Column Level MultiIndex
-        cols = pd.MultiIndex.from_tuples(permutation_list)
+        cols = pd.MultiIndex.from_tuples(self.permutation_list)
 
         # Create Data for the MultiIndex table
-        data = [[1 for i in range(len(permutation_list))] for i in range(len(permutation_list))]
+        data = [[1 for i in range(len(self.permutation_list))] for i in range(len(self.permutation_list))]
         # Construct the permutation  Dataframe
         self.permutation_df = pd.DataFrame(data, columns=cols, index=permutation_index)
         pd.set_option('display.max_rows', None)
-        return len(permutation_list)
+        return len(self.permutation_list)

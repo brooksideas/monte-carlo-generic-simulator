@@ -229,25 +229,48 @@ class MonteCarloTestSuite(unittest.TestCase):
         self.assertEqual(actual, expected_data_frame)
 
     def test_combo_number_die_exception(self):
-        """ Test Combination if nothing is passed. There will be no combination. """
+        """ Test return type is Integer ,Combination if nothing is passed and prove the combination dataframe is
+        built from the combination List . """
         expected_list = self.die_analyzer.combination_list
         expected_dataframe = self.die_analyzer.combination_df
         self.assertEqual(len(expected_list), len(expected_dataframe))
         with self.assertRaises(ValueError) as exception_context:
             self.die_analyzer.combo()
         self.assertEqual(str(exception_context.exception), "Must pass non-zero number of levels/codes")
+        self.assertIsInstance(len(self.die_analyzer.combination_list), int)
 
     def test_combo_string_die_exception(self):
-        """ Test Combination if nothing is passed. There will be no combination. """
+        """ Test return type is Integer , Combination if nothing is passed and prove the combination dataframe is
+        built from the combination List . """
         expected_list = self.coin_analyzer.combination_list
         expected_dataframe = self.coin_analyzer.combination_df
         self.assertEqual(len(expected_list), len(expected_dataframe))
         with self.assertRaises(ValueError) as exception_context:
             self.coin_analyzer.combo()
         self.assertEqual(str(exception_context.exception), "Must pass non-zero number of levels/codes")
+        self.assertIsInstance(len(self.coin_analyzer.combination_list), int)
 
-    # def test_combo(self):
-    #     """Test how combinations are  returned for number data typed dice faces"""
+    def test_permutation_number_die_exception(self):
+        """ Test return type is Integer ,Permutation if nothing is passed and prove the permutation dataframe is
+        built from the permutation List . """
+        expected_list = self.die_analyzer.permutation_list
+        expected_dataframe = self.die_analyzer.permutation_df
+        self.assertEqual(len(expected_list), len(expected_dataframe))
+        with self.assertRaises(ValueError) as exception_context:
+            self.die_analyzer.permutation()
+        self.assertEqual(str(exception_context.exception), "Must pass non-zero number of levels/codes")
+        self.assertIsInstance(len(self.die_analyzer.permutation_list), int)
+
+    def test_permutation_string_die_exception(self):
+        """ Test return type is Integer , Permutation if nothing is passed and prove the permutation dataframe is
+        built from the permutation List . """
+        expected_list = self.coin_analyzer.permutation_list
+        expected_dataframe = self.coin_analyzer.permutation_df
+        self.assertEqual(len(expected_list), len(expected_dataframe))
+        with self.assertRaises(ValueError) as exception_context:
+            self.coin_analyzer.permutation()
+        self.assertEqual(str(exception_context.exception), "Must pass non-zero number of levels/codes")
+        self.assertIsInstance(len(self.coin_analyzer.permutation_list), int)
 
 
 if __name__ == '__main__':
