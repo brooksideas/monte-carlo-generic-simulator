@@ -197,14 +197,37 @@ class MonteCarloTestSuite(unittest.TestCase):
     def test_face_count_number_die(self):
         """Test if the die face count dataframe is correct and has the proper Header construction"""
         actual = self.die_analyzer.face_count()
+        expected_list = len(self.die_analyzer.face_list)
         expected_dataframe_data_type = self.die_analyzer.face_count_df
         self.assertEqual(actual.empty, expected_dataframe_data_type.empty)
+        self.assertEqual(len(actual), expected_list)
 
     def test_face_count_string_die(self):
         """Test if the coin face count dataframe is correct and has the proper Header construction"""
         actual = self.coin_analyzer.face_count()
+        expected_list = len(self.coin_analyzer.face_list)
         expected_dataframe_data_type = self.coin_analyzer.face_count_df
         self.assertEqual(actual.empty, expected_dataframe_data_type.empty)
+        self.assertEqual(len(actual), expected_list)
+
+    def test_jackpot_number_die(self):
+        """ Test the Jackpot method returns a count of strict type integer"""
+        actual = self.die_analyzer.jackpot()
+        expected_list = len(self.die_analyzer.jackpot_list)
+        expected_data_frame = len(self.die_analyzer.jackpot_results_df)
+        self.assertIsInstance(actual, int)
+        self.assertEqual(actual, expected_list)
+        self.assertEqual(actual, expected_data_frame)
+
+    def test_jackpot_string_die(self):
+        """ Test the Jackpot method returns a count of strict type integer"""
+        actual = self.coin_analyzer.jackpot()
+        expected_list = len(self.coin_analyzer.jackpot_list)
+        expected_data_frame = len(self.coin_analyzer.jackpot_results_df)
+        self.assertIsInstance(actual, int)
+        self.assertEqual(actual, expected_list)
+        self.assertEqual(actual, expected_data_frame)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=3)
