@@ -72,7 +72,7 @@ class Die:
         OUTPUTS:
         Return a list of outcomes similar to the face types ([<int> | <str> | <float>]).
         """
-        return [rd.choice(self.faces) for roll in range(number_of_rolls)]
+        return [rd.choice(self.faces) for _ in range(number_of_rolls)]
 
     # Show the user the die’s current set of faces and weights
     def show_state(self):
@@ -195,12 +195,12 @@ class Analyzer:
 
     ATTRIBUTES:
 
-    METHODS:
-    __init__:: Instantiate a Game Objects from the Game Class and infers the data type of the die faces.
-    face counts per roll, i.e. the number of times a given face appeared in each roll. For example, if a roll of five dice has all sixes, then the counts for this roll would be 6 for the face value '6' and 0 for the other faces.
-    jackpot count, i.e. how many times a roll resulted in all faces being the same, e.g. six ones for a six-sided die.
-    combo count, i.e. how many combination types of faces were rolled and their counts.
-    permutation count, i.e. how may sequence types were rolled and their counts.
+    METHODS: __init__:: Instantiate a Game Objects from the Game Class and infers the data type of the die faces.
+    face counts per roll, i.e. the number of times a given face appeared in each roll. For example, if a roll of five
+    dice has all sixes, then the counts for this roll would be 6 for the face value '6' and 0 for the other faces.
+    jackpot count, i.e. how many times a roll resulted in all faces being the same, e.g. six ones for a six-sided
+    die. combo count, i.e. how many combination types of faces were rolled and their counts. permutation count,
+    i.e. how may sequence types were rolled and their counts.
     -------------------------------------------------------------------------
     """
 
@@ -213,7 +213,8 @@ class Analyzer:
         Takes one argument which is a Game Object
 
         OUTPUTS:
-        Assigns Game Object for internal use , Game dataframe type (<int> | <str> | <float>), Result of the Game played([<int> | <str> | <float>])
+        Assigns Game Object for internal use , Game dataframe type (<int> | <str> | <float>),
+        Result of the Game played([<int> | <str> | <float>])
         """
         self.game = game
         # Infers the data type of the die faces
@@ -288,7 +289,6 @@ class Analyzer:
 
         for index, row in self.game_result_df.iterrows():
             for col in self.game.columns:
-                current_die_face = row[col]
                 self.jackpot_list[self.game.cols.index(str(row[col]))] = self.jackpot_list[
                                                                              self.game.cols.index(str(row[col]))] + 1
                 # Save the index only if all values result in similar faces, which is equal to number of cols
@@ -314,14 +314,11 @@ class Analyzer:
         INPUTS:
         Takes no argument
 
-        OUTPUTS:
-        Returns the count of how many times the Game could result in distinct/unique combinations of faces when dice is played/rolled
-        You can also access the full combination multi-columned Dataframe using <Class Analyzer>.combination_df
-        or access the corresponding <Class Analyzer>.combination_list
+        OUTPUTS: Returns the count of how many times the Game could result in distinct/unique combinations of faces
+        when dice is played/rolled You can also access the full combination multi-columned Dataframe using <Class
+        Analyzer>.combination_df or access the corresponding <Class Analyzer>.combination_list
 
         """
-        # Loop through the results array and add to the face_combo_list only if not present
-        face_combo_list = []
 
         # The faces that have been rolled by the dice game
         face_combination_rolled = []
@@ -341,7 +338,6 @@ class Analyzer:
         check_face_presence = []
         for index, row in self.game_result_df.iterrows():
             for col in self.game.columns:
-                current_die_face = row[col]
                 # Check the type of Dataframe type to conditionally pass casting
                 if self.game_df_data_type == int:
                     if row[col] not in check_face_presence:
@@ -353,6 +349,7 @@ class Analyzer:
                     if row[col] not in check_face_presence:
                         check_face_presence.append(row[col])
 
+        # Loop through the results array and add to the face_combo_list only if not present
         # Extract only the Unique values
         face_combo_list = list(set(check_face_presence))
 
@@ -389,7 +386,7 @@ class Analyzer:
         # Create Column Level MultiIndex
         cols = pd.MultiIndex.from_tuples(self.combination_list)
         # Create Data for the MultiIndex table
-        data = [[1 for i in range(len(self.combination_list))] for i in range(len(self.combination_list))]
+        data = [[1 for _ in range(len(self.combination_list))] for _ in range(len(self.combination_list))]
         # Construct the permutation  Dataframe
         self.combination_df = pd.DataFrame(data, columns=cols, index=combination_index)
         pd.set_option('display.max_rows', None)
@@ -410,14 +407,11 @@ class Analyzer:
         Returns the count of all the possible combinations of faces present when dice is played/rolled
         You can also access the permutation multi-columned Dataframe using <Class Analyzer>.permutation_df
         """
-        # Loop through the results array and add to the face_permutation_list only if not present
-        face_permutation_list = []
 
         # Check if the face has been rolled during the Game , checking presence
         check_face_presence = []
         for index, row in self.game_result_df.iterrows():
             for col in self.game.columns:
-                current_die_face = row[col]
                 # Check the type of Dataframe type to conditionally pass casting
                 if self.game_df_data_type == int:
                     if row[col] not in check_face_presence:
@@ -429,6 +423,7 @@ class Analyzer:
                     if row[col] not in check_face_presence:
                         check_face_presence.append(row[col])
 
+        # Loop through the results array and add to the face_permutation_list only if not present
         # Extract only the Unique values
         face_permutation_list = list(set(check_face_presence))
 
@@ -456,7 +451,7 @@ class Analyzer:
         cols = pd.MultiIndex.from_tuples(self.permutation_list)
 
         # Create Data for the MultiIndex table
-        data = [[1 for i in range(len(self.permutation_list))] for i in range(len(self.permutation_list))]
+        data = [[1 for _ in range(len(self.permutation_list))] for _ in range(len(self.permutation_list))]
         # Construct the permutation  Dataframe
         self.permutation_df = pd.DataFrame(data, columns=cols, index=permutation_index)
         pd.set_option('display.max_rows', None)
