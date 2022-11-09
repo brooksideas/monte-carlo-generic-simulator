@@ -1,0 +1,59 @@
+test_change_weight_int_die (__main__.MonteCarloTestSuite)
+Test the change weight method for integer ... ok
+test_change_weight_string_die (__main__.MonteCarloTestSuite)
+Test the change weight method for string ... ok
+test_combo_number_die_exception (__main__.MonteCarloTestSuite)
+Test return type is Integer ,Combination if nothing is passed and prove the combination dataframe is ... ok
+test_combo_string_die_exception (__main__.MonteCarloTestSuite)
+Test return type is Integer , Combination if nothing is passed and prove the combination dataframe is ... ok
+test_create_analyzer_number_die (__main__.MonteCarloTestSuite)
+Test created Analyzer class is correct and infers the datatype from the Game Object ... ok
+test_create_analyzer_string_die (__main__.MonteCarloTestSuite)
+Test created Analyzer class is correct and infers the datatype from the Game Object ... ok
+test_create_float_die (__main__.MonteCarloTestSuite)
+Testing Float Die creation ... ok
+test_create_game_number_die (__main__.MonteCarloTestSuite)
+Create a Game Object from the given dice object , expected an instantiated Die Object list passed ... ok
+test_create_game_string_die (__main__.MonteCarloTestSuite)
+Create a Game Object from the given dice object , expected an instantiated Die Object list passed ... ok
+test_create_number_die (__main__.MonteCarloTestSuite)
+Testing Integer number Die Object creation ... ok
+test_create_string_die (__main__.MonteCarloTestSuite)
+Testing String Die Object creation ... ok
+test_face_count_number_die (__main__.MonteCarloTestSuite)
+Test if the die face count dataframe is correct and has the proper Header construction ... ok
+test_face_count_string_die (__main__.MonteCarloTestSuite)
+Test if the coin face count dataframe is correct and has the proper Header construction ... ok
+test_incorrect_face__number_input_exception (__main__.MonteCarloTestSuite)
+" Test error response when an incorrect face value is passed in string expecting a number ... ok
+test_incorrect_face_string_input_exception (__main__.MonteCarloTestSuite)
+" Test error response when an incorrect face value is passed in number expecting a string ... ok
+test_jackpot_number_die (__main__.MonteCarloTestSuite)
+Test the Jackpot method returns a count of strict type integer ... ok
+test_jackpot_string_die (__main__.MonteCarloTestSuite)
+Test the Jackpot method returns a count of strict type integer ... ok
+test_permutation_number_die_exception (__main__.MonteCarloTestSuite)
+Test return type is Integer ,Permutation if nothing is passed and prove the permutation dataframe is ... ok
+test_permutation_string_die_exception (__main__.MonteCarloTestSuite)
+Test return type is Integer , Permutation if nothing is passed and prove the permutation dataframe is ... ok
+test_play_game_number_die (__main__.MonteCarloTestSuite)
+Play a games with the number faced die ... ok
+test_play_game_string_die (__main__.MonteCarloTestSuite)
+Play a games with the string faced die ... ok
+test_roll_number_die (__main__.MonteCarloTestSuite)
+Test the number faced die being rolled expects a random 10 values ... ok
+test_roll_string_die (__main__.MonteCarloTestSuite)
+Test the string faced die being rolled expects a random 10 values ... ok
+test_show_game_number_die (__main__.MonteCarloTestSuite)
+Show the correct game play result output ... ok
+test_show_game_string_die (__main__.MonteCarloTestSuite)
+Show the correct game play result output ... ok
+test_show_number_die_state (__main__.MonteCarloTestSuite)
+Test if the correct state is being displayed to the user, Shape , Length and Type ... ok
+test_show_string_die_state (__main__.MonteCarloTestSuite)
+Test if the correct state is being displayed to the user, Shape , Length and Type ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 0.050s
+
+OK
