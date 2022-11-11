@@ -28,10 +28,10 @@ class Die:
         Initializes private dataframe containing faces and weights respectively
 
         INPUTS:
-        Takes a List of faces ([<int> | <str> | <float>])
+        Takes a List of faces ([int | str | float])
 
         OUTPUTS:
-        Return a dataframe with faces and weights column (DataFrame(<int> | <str> | <float>))
+        Return a dataframe with faces and weights column (DataFrame(int | str | float))
         """
         self.faces = list(set(faces))  # The faces must be unique
         self.weights = np.ones(len(faces))  # Initialize the weight to 1.0
@@ -44,11 +44,11 @@ class Die:
         PURPOSE:
         Change the weight of a single side/face
 
-        INPUTS: Takes two arguments face value (<int> | <str> | <float>) to be changed and the new weight (<int> |
-        <str> | <float>)
+        INPUTS: Takes two arguments face value (int | str | float) to be changed and the new weight (int |
+        str | float)
 
         OUTPUTS:
-        Assigns a dataframe with faces and the newly assigned weights (DataFrame(<int> | <str> | <float>))
+        Assigns a dataframe with faces and the newly assigned weights (DataFrame(int | str | float))
         """
         # face passed must be valid
         is_face_valid = (lambda face_values: face_values in self.faces)
@@ -67,10 +67,10 @@ class Die:
         Roll the die one or more times
 
         INPUTS:
-        Takes one argument which is Number of rolls (<int>)
+        Takes one argument which is Number of rolls (int)
 
         OUTPUTS:
-        Return a list of outcomes similar to the face types ([<int> | <str> | <float>]).
+        Return a list of outcomes similar to the face types ([int | str | float]).
         """
         return [rd.choice(self.faces) for _ in range(number_of_rolls)]
 
@@ -84,7 +84,7 @@ class Die:
         Takes no argument
 
         OUTPUTS:
-        Returns the dataframe according to the face types (DataFrame(<int> | <str> | <float>)).
+        Returns the dataframe according to the face types (DataFrame(int | str | float)).
         """
         return self.faces_weights_df
 
@@ -111,10 +111,10 @@ class Game:
         Initializes dice object which is inherited from the Die Class
 
         INPUTS:
-        Takes one argument which is a List of Dice Objects ([<int> | <str> | <float>])
+        Takes one argument which is a List of Dice Objects ([int | str | float])
 
         OUTPUTS:
-        Assigns internal dice variable for use in multiple areas (DataFrame(<int> | <str> | <float>))
+        Assigns internal dice variable for use in multiple areas (DataFrame(int | str | float))
         """
         # Take the list of dice
         self.dice = dice
@@ -131,10 +131,10 @@ class Game:
         Rolls the Dice using the inherited roll_die method from the Die class
 
         INPUTS:
-        Takes one parameter to specify how many times the dice should be rolled.(<int>)
+        Takes one parameter to specify how many times the dice should be rolled.(int)
 
-        OUTPUTS: Saves the result of the play to a private dataframe of shape N rolls by M dice. (DataFrame(<int> |
-        <str> | <float>))
+        OUTPUTS: Saves the result of the play to a private dataframe of shape N rolls by M dice. (DataFrame(int |
+        str | float))
         """
         # assign and make the Number of rolls accessible
         self.number_of_rolls = number_of_rolls
@@ -170,11 +170,11 @@ class Game:
         PURPOSE:
         Show the results of the most recent play.
 
-        INPUTS: Takes two arguments the play dataframe (DataFrame(<int> | <str> | <float>)) and df_form (<int>) that
+        INPUTS: Takes two arguments the play dataframe (DataFrame(int | str | float)) and df_form (int) that
         means the default Wide = 1 and Narrow option is 2 as parameters
 
-        OUTPUTS: Display the result of the play result as a dataframe of shape N rolls by M dice.(DataFrame(<int> |
-        <str> | <float>))
+        OUTPUTS: Display the result of the play result as a dataframe of shape N rolls by M dice.(DataFrame(int |
+        str | float))
         """
         if df_form != 1 and df_form != 2:
             return print("Error:The dataframe display format option can only be Wide(value 1) or Narrow(value 2).")
@@ -213,8 +213,8 @@ class Analyzer:
         Takes one argument which is a Game Object
 
         OUTPUTS:
-        Assigns Game Object for internal use , Game dataframe type (<int> | <str> | <float>),
-        Result of the Game played([<int> | <str> | <float>])
+        Assigns Game Object for internal use , Game dataframe type (int | str | float),
+        Result of the Game played([int | str | float])
         """
         self.game = game
         # Infers the data type of the die faces
@@ -247,7 +247,7 @@ class Analyzer:
         Takes no argument
 
         OUTPUTS:
-        Returns the Face Count dataframe according to the initial dice face type (DataFrame(<int> | <str> | <float>))
+        Returns the Face Count dataframe according to the initial dice face type (DataFrame(int | str | float))
         """
         index = [i for i in range(1, self.game.number_of_rolls + 1)]
         self.face_count_df = pd.DataFrame(index=index, columns=self.game.cols)
@@ -278,7 +278,7 @@ class Analyzer:
 
         OUTPUTS:
         Returns the count of how many times the game resulted in all faces being identical
-        You can also access the Jackpot Dataframe using <Class Analyzer>.jackpot_results_df
+        You can also access the Jackpot Dataframe using Class Analyzer.jackpot_results_df
         """
         self.jackpot_results_df = pd.DataFrame(columns=self.game.cols)
         self.jackpot_results_df.index.name = 'roll number'
@@ -315,8 +315,8 @@ class Analyzer:
         Takes no argument
 
         OUTPUTS: Returns the count of how many times the Game could result in distinct/unique combinations of faces
-        when dice is played/rolled You can also access the full combination multi-columned Dataframe using <Class
-        Analyzer>.combination_df or access the corresponding <Class Analyzer>.combination_list
+        when dice is played/rolled You can also access the full combination multi-columned Dataframe using Class
+        Analyzer.combination_df or access the corresponding Class Analyzer.combination_list
 
         """
 
@@ -389,7 +389,6 @@ class Analyzer:
         data = [[1 for _ in range(len(self.combination_list))] for _ in range(len(self.combination_list))]
         # Construct the permutation  Dataframe
         self.combination_df = pd.DataFrame(data, columns=cols, index=combination_index)
-        pd.set_option('display.max_rows', None)
 
         # Return the count of all the unique combinations from the game
         return len(list(set(face_combination_rolled)))
@@ -405,7 +404,7 @@ class Analyzer:
 
         OUTPUTS:
         Returns the count of all the possible combinations of faces present when dice is played/rolled
-        You can also access the permutation multi-columned Dataframe using <Class Analyzer>.permutation_df
+        You can also access the permutation multi-columned Dataframe using Class Analyzer.permutation_df
         """
 
         # Check if the face has been rolled during the Game , checking presence
@@ -454,5 +453,4 @@ class Analyzer:
         data = [[1 for _ in range(len(self.permutation_list))] for _ in range(len(self.permutation_list))]
         # Construct the permutation  Dataframe
         self.permutation_df = pd.DataFrame(data, columns=cols, index=permutation_index)
-        pd.set_option('display.max_rows', None)
         return len(self.permutation_list)
